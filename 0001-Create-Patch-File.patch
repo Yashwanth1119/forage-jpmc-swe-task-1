@@ -1,0 +1,503 @@
+From 0f529603b9aef976936433b71548b1fce15a0d56 Mon Sep 17 00:00:00 2001
+From: Yashwanth1119 <yashwanthtvv@gmail.com>
+Date: Wed, 11 Oct 2023 09:27:30 +0000
+Subject: [PATCH] Create Patch File
+
+---
+ __pycache__/client3.cpython-310.pyc | Bin 0 -> 1184 bytes
+ client3.py                          |  54 +++++++-----
+ client_test.py                      |  19 +++-
+ server3.py                          | 132 ++++++++++++----------------
+ 4 files changed, 104 insertions(+), 101 deletions(-)
+ create mode 100644 __pycache__/client3.cpython-310.pyc
+
+diff --git a/__pycache__/client3.cpython-310.pyc b/__pycache__/client3.cpython-310.pyc
+new file mode 100644
+index 0000000000000000000000000000000000000000..f1ba4b26512782ccdcd09f1b4fc8e8116a52b127
+GIT binary patch
+literal 1184
+zcmYjR!EPHj5G8lHtCcJ#PNUdX-2+=7ja5{Ui(UewNsBf`Z$=WMhY&3mYjGs6wc3?Q
+zszFrgq<%m@K|c0(dgQeyUyGi4X@}g{2p61r!yR&F9tW(pw_60qRDKG-Bl^o3?~f)L
+z-{91LqL4(=f(Yt$AOf#L5qix8lYxk2C}PQE^cxWk8OsLh1e!9L1PaDPv|tO`5U=T)
+zJ|{mv6Wb7O?f|{GyV-$ga}U^tU6Ct#MK>QfE$%l7+(*x@=s*KHYx)xt55%t66Z_DW
+zO?Uvium}4iwoBHO5@>Bcg#9Z-mrwD33leBa(#3VT)g|ko_PRWj^b~73CB61F)<sSh
+zAD<gDJ01**YM2%0l{Uvuj-DJ1F6W@$ex1vwzpnCsC?P|fw<AKtaDInVe~Y3?mUwEH
+ztf+A)=n@%XRJsbh&2H^*87#v+BBKMcVoU0*B^xo!Cte)$7pju;A@Hmycs1hY9C!&J
+zLGoX+Vh);{ijScLl^Jy6GBeq%%1gs-q)j!P*oLWQ=~*sqG*kHyYCF@D>j0DNQ5%hl
+zDl@&vMwj!-fO5;Wi5t?|zlpvzRIa{1h}uH+Z-4NnQWHJPhM)(dN@Zi{U(BY%zJ3FJ
+zgM0d442DGxrTOyl?5%B&!92&@UijSb0Nq9r1PR^2uN}0h+Qx;Ui+(dg1kU!99wBHt
+zQmLd9rdmrx2juj|?$q`wSO$2RL9Kh?;uHP@7>?xRm7~v>lx93D<vV=FmAl3hUsW#@
+zjdw0L;LJvTxBp)Ym$^-_pjYnL&(P94D1soMi7$vz_8+6_uJ=pRX_l91x_I=`@hka5
+z%`?Lfk>TTq`g4v{dF|sO>Mas~F8W=&%z6jn&Ri8me)d=awxBj5u5HUqJ_W%pbXAI2
+zVNKOkL@$5*{?%(sPduNuIh5HH($vO2inc7rn|76zW3V)}5%z%8qHz<Uff1@1ls3kz
+zoo2=|1(~$5ZxO8$%*!{5a!-PCuZC|9-(#h*aW=!v@;%O6&#0QXucp}11w3=b=|dDr
+eC!y|RAq$bfR<gy|4&}7&jt+LmN0j}|qW=Ns1tatT
+
+literal 0
+HcmV?d00001
+
+diff --git a/client3.py b/client3.py
+index 3fc09b7..f474560 100644
+--- a/client3.py
++++ b/client3.py
+@@ -18,9 +18,10 @@
+ #  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ #  DEALINGS IN THE SOFTWARE.
+ 
++import urllib.request
++import time
+ import json
+ import random
+-import urllib.request
+ 
+ # Server API URLs
+ QUERY = "http://localhost:8080/query?id={}"
+@@ -28,32 +29,39 @@ QUERY = "http://localhost:8080/query?id={}"
+ # 500 server request
+ N = 500
+ 
+-
+ def getDataPoint(quote):
+-    """ Produce all the needed values to generate a datapoint """
+-    """ ------------- Update this function ------------- """
+-    stock = quote['stock']
+-    bid_price = float(quote['top_bid']['price'])
+-    ask_price = float(quote['top_ask']['price'])
+-    price = bid_price
+-    return stock, bid_price, ask_price, price
+-
++	""" Produce all of the needed values to generate a datapoint """
++	""" ------------- Update this function ------------- """
++	stock = quote['stock']
++	bid_price = float(quote['top_bid']['price'])
++	ask_price = float(quote['top_ask']['price'])
++	#to find price adding bid_price and ask_price and divide it by 2
++	price =( bid_price+ask_price)/2
++	return stock, bid_price, ask_price, price
+ 
+ def getRatio(price_a, price_b):
+-    """ Get ratio of price_a and price_b """
+-    """ ------------- Update this function ------------- """
+-    return 1
+-
++	""" Get ratio of price_a and price_b """
++	""" ------------- Update this function ------------- """
++	""" Also create some unit tests for this function in client_test.py """
++        #using ternary operator to avoid ZeroDivision error
++	if(price_b>0):
++                return (price_a/price_b)
++	ratio=(price_a/price_b) if price_b>0 else  None
++	return ratio
+ 
+ # Main
+ if __name__ == "__main__":
+-    # Query the price once every N seconds.
+-    for _ in iter(range(N)):
+-        quotes = json.loads(urllib.request.urlopen(QUERY.format(random.random())).read())
+-
+-        """ ----------- Update to get the ratio --------------- """
+-        for quote in quotes:
+-            stock, bid_price, ask_price, price = getDataPoint(quote)
+-            print("Quoted %s at (bid:%s, ask:%s, price:%s)" % (stock, bid_price, ask_price, price))
+ 
+-        print("Ratio %s" % getRatio(price, price))
++	# Query the price once every N seconds.
++	#array used to store the prices
++	prices=[]
++	for _ in iter(range(N)):
++		quotes = json.loads(urllib.request.urlopen(QUERY.format(random.random())).read())
++	
++		""" ----------- Update to get the ratio --------------- """
++		for quote in quotes:
++			stock, bid_price, ask_price, price = getDataPoint(quote)
++			print ("Quoted %s at (bid:%s, ask:%s, price:%s)" % (stock, bid_price, ask_price, price))
++                        #appending the prices to array 
++			prices.append(price)
++		print ("Ratio %s" % getRatio(prices[0], prices[1]))
+\ No newline at end of file
+diff --git a/client_test.py b/client_test.py
+index af2bf26..ba02a57 100644
+--- a/client_test.py
++++ b/client_test.py
+@@ -1,5 +1,5 @@
+ import unittest
+-from client3 import getDataPoint
++from client3 import getDataPoint ,getRatio
+ 
+ class ClientTest(unittest.TestCase):
+   def test_getDataPoint_calculatePrice(self):
+@@ -8,6 +8,9 @@ class ClientTest(unittest.TestCase):
+       {'top_ask': {'price': 121.68, 'size': 4}, 'timestamp': '2019-02-11 22:06:30.572453', 'top_bid': {'price': 117.87, 'size': 81}, 'id': '0.109974697771', 'stock': 'DEF'}
+     ]
+     """ ------------ Add the assertion below ------------ """
++    for quote in quotes:
++      self.assertEqual(getDataPoint(quote),((quote["stock"],quote['top_bid']['price'],quote['top_ask']['price'],(quote['top_bid']['price']+
++quote['top_ask']['price'])/2)))
+ 
+   def test_getDataPoint_calculatePriceBidGreaterThanAsk(self):
+     quotes = [
+@@ -15,11 +18,23 @@ class ClientTest(unittest.TestCase):
+       {'top_ask': {'price': 121.68, 'size': 4}, 'timestamp': '2019-02-11 22:06:30.572453', 'top_bid': {'price': 117.87, 'size': 81}, 'id': '0.109974697771', 'stock': 'DEF'}
+     ]
+     """ ------------ Add the assertion below ------------ """
++    for quote in quotes:
++      self.assertEqual(getDataPoint(quote),((quote["stock"],quote['top_bid']['price'],quote['top_ask']['price'],(quote['top_bid']['price']+
++quote['top_ask']['price'])/2)))
+ 
+ 
+   """ ------------ Add more unit tests ------------ """
++  #normal prices testing for get_ratio function 
++  def test_getRatio(self):
++    prices=[121.2,121.68,119.2,121.68,117.7,119.1,120.09,118.8,120.45,145.56,0,34.4]
++    for i in range(0,len(prices),2):
++       self.assertEqual((prices[i]/prices[i+1]) ,getRatio(prices[i],prices[i+1]))
+ 
++  #testing  get_ratio function if none is return when divide by zero  
++  def test_getRatio_zeroDivisionError(self):
++       self.assertEqual(None ,getRatio(121.1,0))
++       
+ 
+ 
+ if __name__ == '__main__':
+-    unittest.main()
++    unittest.main()
+\ No newline at end of file
+diff --git a/server3.py b/server3.py
+index 1836de2..c6d3091 100644
+--- a/server3.py
++++ b/server3.py
+@@ -18,20 +18,22 @@
+ #  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ #  DEALINGS IN THE SOFTWARE.
+ 
++#from itertools import izip
++from random    import normalvariate, random
++from datetime  import timedelta, datetime
++
+ import csv
+-# from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
+-import http.server
+-import json
+-import operator
++import dateutil.parser
+ import os.path
++
++import operator
++import json
+ import re
+ import threading
+-from datetime import timedelta, datetime
+-# from itertools import izip
+-from random import normalvariate, random
+-from socketserver import ThreadingMixIn
+ 
+-import dateutil.parser
++#from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
++import http.server
++from socketserver   import ThreadingMixIn
+ 
+ ################################################################################
+ #
+@@ -39,21 +41,20 @@ import dateutil.parser
+ 
+ # Sim params
+ 
+-REALTIME = True
+-SIM_LENGTH = timedelta(days=365 * 5)
+-MARKET_OPEN = datetime.today().replace(hour=0, minute=30, second=0)
++REALTIME    = True
++SIM_LENGTH  = timedelta(days = 365 * 5)
++MARKET_OPEN = datetime.today().replace(hour = 0, minute = 30, second = 0)
+ 
+ # Market parms
+ #       min  / max  / std
+-SPD = (2.0, 6.0, 0.1)
+-PX = (60.0, 150.0, 1)
+-FREQ = (12, 36, 50)
++SPD  = (2.0,   6.0,   0.1)
++PX   = (60.0,  150.0, 1)
++FREQ = (12,    36,   50)
+ 
+ # Trades
+ 
+ OVERLAP = 4
+ 
+-
+ ################################################################################
+ #
+ # Test Data
+@@ -65,15 +66,13 @@ def bwalk(min, max, std):
+         max += normalvariate(0, std)
+         yield abs((max % (rng * 2)) - rng) + min
+ 
+-
+-def market(t0=MARKET_OPEN):
++def market(t0 = MARKET_OPEN):
+     """ Generates a random series of market conditions,
+         (time, price, spread).
+     """
+     for hours, px, spd in zip(bwalk(*FREQ), bwalk(*PX), bwalk(*SPD)):
+         yield t0, px, spd
+-        t0 += timedelta(hours=abs(hours))
+-
++        t0 += timedelta(hours = abs(hours))
+ 
+ def orders(hist):
+     """ Generates a random set of limit orders (time, side, price, size) from
+@@ -81,9 +80,9 @@ def orders(hist):
+     """
+     for t, px, spd in hist:
+         stock = 'ABC' if random() > 0.5 else 'DEF'
+-        side, d = ('sell', 2) if random() > 0.5 else ('buy', -2)
++        side, d  = ('sell', 2) if random() > 0.5 else ('buy', -2)
+         order = round(normalvariate(px + (spd / d), spd / OVERLAP), 2)
+-        size = int(abs(normalvariate(0, 100)))
++        size  = int(abs(normalvariate(0, 100)))
+         yield t, stock, side, order, size
+ 
+ 
+@@ -91,15 +90,14 @@ def orders(hist):
+ #
+ # Order Book
+ 
+-def add_book(book, order, size, _age=10):
++def add_book(book, order, size, _age = 10):
+     """ Add a new order and size to a book, and age the rest of the book. """
+     yield order, size, _age
+     for o, s, age in book:
+         if age > 0:
+             yield o, s, age - 1
+ 
+-
+-def clear_order(order, size, book, op=operator.ge, _notional=0):
++def clear_order(order, size, book, op = operator.ge, _notional = 0):
+     """ Try to clear a sized order against a book, returning a tuple of
+         (notional, new_book) if successful, and None if not.  _notional is a
+         recursive accumulator and should not be provided by the caller.
+@@ -113,8 +111,7 @@ def clear_order(order, size, book, op=operator.ge, _notional=0):
+         elif len(tail) > 0:
+             return clear_order(order, -sdiff, tail, op, _notional)
+ 
+-
+-def clear_book(buy=None, sell=None):
++def clear_book(buy = None, sell = None):
+     """ Clears all crossed orders from a buy and sell book, returning the new
+         books uncrossed.
+     """
+@@ -123,12 +120,11 @@ def clear_book(buy=None, sell=None):
+         new_book = clear_order(order, size, sell)
+         if new_book:
+             sell = new_book[1]
+-            buy = buy[1:]
++            buy  = buy[1:]
+         else:
+             break
+     return buy, sell
+ 
+-
+ def order_book(orders, book, stock_name):
+     """ Generates a series of order books from a series of orders.  Order books
+         are mutable lists, and mutating them during generation will affect the
+@@ -137,11 +133,10 @@ def order_book(orders, book, stock_name):
+     for t, stock, side, order, size in orders:
+         if stock_name == stock:
+             new = add_book(book.get(side, []), order, size)
+-            book[side] = sorted(new, reverse=side == 'buy', key=lambda x: x[0])
++            book[side] = sorted(new, reverse = side == 'buy', key = lambda x: x[0])
+         bids, asks = clear_book(**book)
+         yield t, bids, asks
+ 
+-
+ ################################################################################
+ #
+ # Test Data Persistence
+@@ -155,14 +150,12 @@ def generate_csv():
+                 break
+             writer.writerow([t, stock, side, order, size])
+ 
+-
+ def read_csv():
+     """ Read a CSV or order history into a list. """
+     with open('test.csv', 'rt') as f:
+         for time, stock, side, order, size in csv.reader(f):
+             yield dateutil.parser.parse(time), stock, side, float(order), int(size)
+ 
+-
+ ################################################################################
+ #
+ # Server
+@@ -172,25 +165,20 @@ class ThreadedHTTPServer(ThreadingMixIn, http.server.HTTPServer):
+         shutdown.
+     """
+     allow_reuse_address = True
+-
+     def shutdown(self):
+         """ Override MRO to shutdown properly. """
+         self.socket.close()
+         http.server.HTTPServer.shutdown(self)
+ 
+-
+ def route(path):
+     """ Decorator for a simple bottle-like web framework.  Routes path to the
+         decorated method, with the rest of the path as an argument.
+     """
+-
+     def _route(f):
+         setattr(f, '__route__', path)
+         return f
+-
+     return _route
+ 
+-
+ def read_params(path):
+     """ Read query parameters into a dictionary if they are parseable,
+         otherwise returns None.
+@@ -200,7 +188,6 @@ def read_params(path):
+         query = query[1].split('&')
+         return dict(map(lambda x: x.split('='), query))
+ 
+-
+ def get(req_handler, routes):
+     """ Map a request to the appropriate route of a routes instance. """
+     for name, handler in routes.__class__.__dict__.items():
+@@ -212,27 +199,23 @@ def get(req_handler, routes):
+                 req_handler.end_headers()
+                 params = read_params(req_handler.path)
+                 data = json.dumps(handler(routes, params)) + '\n'
+-                req_handler.wfile.write(bytes(data, encoding='utf-8'))
++                req_handler.wfile.write(bytes(data,  encoding = 'utf-8'))
+                 return
+ 
+-
+-def run(routes, host='0.0.0.0', port=8080):
++def run(routes, host = '0.0.0.0', port = 8080):
+     """ Runs a class as a server whose methods have been decorated with
+         @route.
+     """
+-
+     class RequestHandler(http.server.BaseHTTPRequestHandler):
+         def log_message(self, *args, **kwargs):
+             pass
+-
+         def do_GET(self):
+             get(self, routes)
+-
+     server = ThreadedHTTPServer((host, port), RequestHandler)
+-    thread = threading.Thread(target=server.serve_forever)
++    thread = threading.Thread(target = server.serve_forever)
+     thread.daemon = True
+     thread.start()
+-    print('HTTP server started on port 8080')
++    print ('HTTP server started on port 8080')
+     while True:
+         from time import sleep
+         sleep(1)
+@@ -240,27 +223,25 @@ def run(routes, host='0.0.0.0', port=8080):
+     server.start()
+     server.waitForThread()
+ 
+-
+ ################################################################################
+ #
+ # App
+ 
+ ops = {
+-    'buy': operator.le,
++    'buy':  operator.le,
+     'sell': operator.ge,
+ }
+ 
+-
+ class App(object):
+     """ The trading game server application. """
+ 
+     def __init__(self):
+-        self._book_1 = dict()
+-        self._book_2 = dict()
+-        self._data_1 = order_book(read_csv(), self._book_1, 'ABC')
+-        self._data_2 = order_book(read_csv(), self._book_2, 'DEF')
++        self._book_1    = dict()
++        self._book_2    = dict()
++        self._data_1    = order_book(read_csv(), self._book_1, 'ABC')
++        self._data_2    = order_book(read_csv(), self._book_2, 'DEF')
+         self._rt_start = datetime.now()
+-        self._sim_start, _, _ = next(self._data_1)
++        self._sim_start, _, _  = next(self._data_1)
+         self.read_10_first_lines()
+ 
+     @property
+@@ -282,9 +263,9 @@ class App(object):
+                 yield t, bids, asks
+ 
+     def read_10_first_lines(self):
+-        for _ in iter(range(10)):
+-            next(self._data_1)
+-            next(self._data_2)
++            for _ in iter(range(10)):
++                next(self._data_1)
++                next(self._data_2)
+ 
+     @route('/query')
+     def handle_query(self, x):
+@@ -295,12 +276,12 @@ class App(object):
+             t1, bids1, asks1 = next(self._current_book_1)
+             t2, bids2, asks2 = next(self._current_book_2)
+         except Exception as e:
+-            print("error getting stocks...reinitalizing app")
++            print ("error getting stocks...reinitalizing app")
+             self.__init__()
+             t1, bids1, asks1 = next(self._current_book_1)
+             t2, bids2, asks2 = next(self._current_book_2)
+         t = t1 if t1 > t2 else t2
+-        print('Query received @ t%s' % t)
++        print ('Query received @ t%s' % t)
+         return [{
+             'id': x and x.get('id', None),
+             'stock': 'ABC',
+@@ -314,20 +295,19 @@ class App(object):
+                 'size': asks1[0][1]
+             }
+         },
+-            {
+-                'id': x and x.get('id', None),
+-                'stock': 'DEF',
+-                'timestamp': str(t),
+-                'top_bid': bids2 and {
+-                    'price': bids2[0][0],
+-                    'size': bids2[0][1]
+-                },
+-                'top_ask': asks2 and {
+-                    'price': asks2[0][0],
+-                    'size': asks2[0][1]
+-                }
+-            }]
+-
++        {
++            'id': x and x.get('id', None),
++            'stock': 'DEF',
++            'timestamp': str(t),
++            'top_bid': bids2 and {
++                'price': bids2[0][0],
++                'size': bids2[0][1]
++            },
++            'top_ask': asks2 and {
++                'price': asks2[0][0],
++                'size': asks2[0][1]
++            }
++        }]
+ 
+ ################################################################################
+ #
+@@ -335,6 +315,6 @@ class App(object):
+ 
+ if __name__ == '__main__':
+     if not os.path.isfile('test.csv'):
+-        print("No data found, generating...")
++        print ("No data found, generating...")
+         generate_csv()
+-    run(App())
++    run(App())
+\ No newline at end of file
+-- 
+2.42.0
+
